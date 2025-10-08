@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Trophy, RotateCcw } from "lucide-react";
 import { Verb } from "@/data/verbs";
@@ -35,6 +35,9 @@ export const GameSummary = ({
               {hasWon ? "Congratulations! 🎉" : "Game Summary"}
             </div>
           </DialogTitle>
+          <DialogDescription className="text-center">
+            View your game results and statistics
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 pt-4">

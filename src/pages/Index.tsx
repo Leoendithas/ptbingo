@@ -65,15 +65,29 @@ const Index = () => {
 
     try {
       // TODO: Replace with actual AI handwriting recognition via Lovable Cloud
-      // For now, simulate a simple check
+      // For now, simulate more realistic handwriting recognition
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Mock recognition - randomly decide if correct (this will be replaced with AI)
-      const mockInterpretation = Math.random() > 0.3 
-        ? gameVerbs[selectedCell.index].past 
-        : "incorrect";
+      const correctAnswer = gameVerbs[selectedCell.index].past;
       
-      const isCorrect = mockInterpretation.toLowerCase() === gameVerbs[selectedCell.index].past.toLowerCase();
+      // Simulate realistic handwriting recognition with common mistakes
+      const generatePlausibleMisreading = (correct: string): string => {
+        const commonMistakes = [
+          correct.slice(0, -1), // Missing last letter
+          correct + "ed", // Added extra "ed"
+          correct.replace(/e$/, ""), // Missing final e
+          correct.replace(/d$/, "t"), // d/t confusion
+          correct.slice(0, -2) + correct.slice(-1), // Missing second to last letter
+        ];
+        return commonMistakes[Math.floor(Math.random() * commonMistakes.length)];
+      };
+      
+      // 70% chance of correct recognition, 30% chance of misreading
+      const mockInterpretation = Math.random() > 0.3 
+        ? correctAnswer
+        : generatePlausibleMisreading(correctAnswer);
+      
+      const isCorrect = mockInterpretation.toLowerCase() === correctAnswer.toLowerCase();
 
       setAnswerResult({
         correct: isCorrect,

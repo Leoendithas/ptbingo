@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Verb } from "@/data/verbs";
-import { Plus, Trash2, Save } from "lucide-react";
+import { Plus, Trash2, Save, Lock } from "lucide-react";
 import { toast } from "sonner";
 
 interface VerbListDialogProps {
@@ -16,6 +16,27 @@ interface VerbListDialogProps {
 
 export const VerbListDialog = ({ open, onOpenChange, verbs, onSave }: VerbListDialogProps) => {
   const [editedVerbs, setEditedVerbs] = useState<Verb[]>(verbs);
+  const [password, setPassword] = useState("");
+  const [isUnlocked, setIsUnlocked] = useState(false);
+
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === "Bendemeer") {
+      setIsUnlocked(true);
+      toast.success("Access granted!");
+    } else {
+      toast.error("Incorrect password");
+      setPassword("");
+    }
+  };
+
+  const handleDialogChange = (open: boolean) => {
+    onOpenChange(open);
+    if (!open) {
+      setIsUnlocked(false);
+      setPassword("");
+    }
+  };
 
   const addVerb = () => {
     setEditedVerbs([...editedVerbs, { present: "", past: "", isRegular: true }]);
@@ -45,13 +66,39 @@ export const VerbListDialog = ({ open, onOpenChange, verbs, onSave }: VerbListDi
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleDialogChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Customize Verb List</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">
+            {isUnlocked ? "Customize Verb List" : "Enter Password"}
+          </DialogTitle>
+          <DialogDescription>
+            {isUnlocked 
+              ? "Add, edit, or remove verbs from the game list" 
+              : "Password required to access verb customization"}
+          </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 pt-4">
+        {!isUnlocked ? (
+          <form onSubmit={handlePasswordSubmit} className="space-y-4 pt-4">
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+                autoFocus
+              />
+            </div>
+            <Button type="submit" className="w-full bg-gradient-primary">
+              <Lock className="mr-2 h-4 w-4" />
+              Unlock
+            </Button>
+          </form>
+        ) : (
+          <div className="space-y-4 pt-4">
           <div className="flex justify-between items-center">
             <p className="text-sm text-muted-foreground">
               Total verbs: {editedVerbs.length} (minimum 25 required)
@@ -120,6 +167,7 @@ export const VerbListDialog = ({ open, onOpenChange, verbs, onSave }: VerbListDi
             </Button>
           </div>
         </div>
+        )}
       </DialogContent>
     </Dialog>
   );
