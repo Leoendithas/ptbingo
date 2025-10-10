@@ -8,6 +8,7 @@ import { VerbListDialog } from "@/components/VerbListDialog";
 import { defaultVerbs, getRandomVerbs, Verb } from "@/data/verbs";
 import { checkBingoWin } from "@/lib/bingo-utils";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CellState {
   attempted: boolean;
@@ -64,34 +65,33 @@ const Index = () => {
     setIsSubmitting(true);
 
     try {
-      // TODO: Replace with actual AI handwriting recognition via Lovable Cloud
-      // For now, simulate more realistic handwriting recognition
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
       const correctAnswer = gameVerbs[selectedCell.index].past;
-      
-      // Simulate realistic handwriting recognition with common mistakes
-      const generatePlausibleMisreading = (correct: string): string => {
-        const commonMistakes = [
-          correct.slice(0, -1), // Missing last letter
-          correct + "ed", // Added extra "ed"
-          correct.replace(/e$/, ""), // Missing final e
-          correct.replace(/d$/, "t"), // d/t confusion
-          correct.slice(0, -2) + correct.slice(-1), // Missing second to last letter
-        ];
-        return commonMistakes[Math.floor(Math.random() * commonMistakes.length)];
-      };
-      
-      // 70% chance of correct recognition, 30% chance of misreading
-      const mockInterpretation = Math.random() > 0.3 
-        ? correctAnswer
-        : generatePlausibleMisreading(correctAnswer);
-      
-      const isCorrect = mockInterpretation.toLowerCase() === correctAnswer.toLowerCase();
+
+      // Call the handwriting recognition edge function
+      const { data, error } = await supabase.functions.invoke('recognize-handwriting', {
+        body: { imageData }
+      });
+
+      if (error) {
+        console.error('Error calling handwriting recognition:', error);
+        if (error.message.includes('Rate limit')) {
+          toast.error("Too many attempts! Please wait a moment.");
+        } else if (error.message.includes('usage limit')) {
+          toast.error("AI usage limit reached. Please contact your teacher.");
+        } else {
+          toast.error("Failed to check your answer. Please try again.");
+        }
+        return;
+      }
+
+      const interpretedText = data?.text?.toLowerCase().trim() || '';
+      console.log('AI interpreted:', interpretedText, 'Expected:', correctAnswer);
+
+      const isCorrect = interpretedText === correctAnswer.toLowerCase();
 
       setAnswerResult({
         correct: isCorrect,
-        interpreted: mockInterpretation,
+        interpreted: interpretedText || 'Unable to read',
       });
 
       // Update cell state
