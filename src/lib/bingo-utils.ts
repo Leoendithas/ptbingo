@@ -1,48 +1,8 @@
 export function checkBingoWin(correctCells: boolean[]): boolean {
-  // Check rows
-  for (let i = 0; i < 5; i++) {
-    const rowStart = i * 5;
-    if (correctCells.slice(rowStart, rowStart + 5).every(cell => cell)) {
-      return true;
-    }
-  }
-
-  // Check columns
-  for (let i = 0; i < 5; i++) {
-    if (
-      correctCells[i] &&
-      correctCells[i + 5] &&
-      correctCells[i + 10] &&
-      correctCells[i + 15] &&
-      correctCells[i + 20]
-    ) {
-      return true;
-    }
-  }
-
-  // Check diagonal (top-left to bottom-right)
-  if (
-    correctCells[0] &&
-    correctCells[6] &&
-    correctCells[12] &&
-    correctCells[18] &&
-    correctCells[24]
-  ) {
-    return true;
-  }
-
-  // Check diagonal (top-right to bottom-left)
-  if (
-    correctCells[4] &&
-    correctCells[8] &&
-    correctCells[12] &&
-    correctCells[16] &&
-    correctCells[20]
-  ) {
-    return true;
-  }
-
-  return false;
+  // Use getWinningLines to count completed lines
+  const winningLines = getWinningLines(correctCells);
+  // Win condition: 3 or more completed lines
+  return winningLines.length >= 3;
 }
 
 export function getWinningLines(correctCells: boolean[]): number[][] {
