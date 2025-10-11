@@ -7,7 +7,7 @@ interface AnswerDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   verb: string;
-  onSubmit: (text: string) => void;
+  onSubmit: (imageData: string) => void;
   isSubmitting: boolean;
   result: {
     correct: boolean;

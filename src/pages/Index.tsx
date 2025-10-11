@@ -8,6 +8,7 @@ import { VerbListDialog } from "@/components/VerbListDialog";
 import { defaultVerbs, getRandomVerbs, Verb } from "@/data/verbs";
 import { checkBingoWin } from "@/lib/bingo-utils";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CellState {
   attempted: boolean;
@@ -58,22 +59,39 @@ const Index = () => {
     setAnswerResult(null);
   };
 
-  const handleSubmitAnswer = async (text: string) => {
+  const handleSubmitAnswer = async (imageData: string) => {
     if (!selectedCell) return;
 
     setIsSubmitting(true);
 
     try {
       const correctAnswer = gameVerbs[selectedCell.index].past;
-      const interpretedText = text.toLowerCase().trim();
-      
-      console.log('User wrote:', interpretedText, 'Expected:', correctAnswer);
+
+      // Call the handwriting recognition edge function
+      const { data, error } = await supabase.functions.invoke('recognize-handwriting', {
+        body: { imageData }
+      });
+
+      if (error) {
+        console.error('Error calling handwriting recognition:', error);
+        if (error.message.includes('Rate limit')) {
+          toast.error("Too many attempts! Please wait a moment.");
+        } else if (error.message.includes('usage limit')) {
+          toast.error("AI usage limit reached. Please contact your teacher.");
+        } else {
+          toast.error("Failed to check your answer. Please try again.");
+        }
+        return;
+      }
+
+      const interpretedText = data?.text?.toLowerCase().trim() || '';
+      console.log('AI interpreted:', interpretedText, 'Expected:', correctAnswer);
 
       const isCorrect = interpretedText === correctAnswer.toLowerCase();
 
       setAnswerResult({
         correct: isCorrect,
-        interpreted: text || 'Unable to read',
+        interpreted: interpretedText || 'Unable to read',
       });
 
       // Update cell state
