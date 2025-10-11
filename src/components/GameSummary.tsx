@@ -26,8 +26,8 @@ export const GameSummary = ({
   const totalAttempts = cellStates.reduce((sum, s) => sum + s.attempts, 0);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+    <Dialog open={open} onOpenChange={(open) => open && onOpenChange(open)}>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" onEscapeKeyDown={(e) => e.preventDefault()} onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className="text-center space-y-2">
             {hasWon && <Trophy className="w-16 h-16 text-warning mx-auto animate-bounce-subtle" />}

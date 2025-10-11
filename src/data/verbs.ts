@@ -43,6 +43,21 @@ export const defaultVerbs: Verb[] = [
   { present: "fly", past: "flew", isRegular: false },
   { present: "buy", past: "bought", isRegular: false },
   { present: "find", past: "found", isRegular: false },
+  { present: "sleep", past: "slept", isRegular: false },
+  { present: "stand", past: "stood", isRegular: false },
+  { present: "sit", past: "sat", isRegular: false },
+  { present: "draw", past: "drew", isRegular: false },
+  { present: "cut", past: "cut", isRegular: false },
+  { present: "hold", past: "held", isRegular: false },
+  { present: "catch", past: "caught", isRegular: false },
+  { present: "throw", past: "threw", isRegular: false },
+  { present: "hide", past: "hid", isRegular: false },
+  { present: "ride", past: "rode", isRegular: false },
+  { present: "wake", past: "woke", isRegular: false },
+  { present: "wear", past: "wore", isRegular: false },
+  { present: "wash", past: "washed", isRegular: true },
+  { present: "push", past: "pushed", isRegular: true },
+  { present: "pull", past: "pulled", isRegular: true },
 ];
 
 export function getRandomVerbs(count: number, verbs: Verb[] = defaultVerbs): Verb[] {
