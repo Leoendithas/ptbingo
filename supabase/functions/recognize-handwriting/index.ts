@@ -19,45 +19,42 @@ serve(async (req) => {
       throw new Error('No image data provided');
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
+    const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
+    if (!GEMINI_API_KEY) {
+      throw new Error('GEMINI_API_KEY is not configured');
     }
 
-    console.log('Sending image to Lovable AI for handwriting recognition...');
+    console.log('Sending image to Gemini API for handwriting recognition...');
 
-    // Call Lovable AI Gateway with vision capabilities
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    // Extract base64 image data (remove data URL prefix if present)
+    const base64Image = imageData.replace(/^data:image\/\w+;base64,/, '');
+
+    // Call Gemini API directly
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
+        contents: [
           {
-            role: 'system',
-            content: 'You are a handwriting recognition assistant for elementary school students learning English verb tenses. Your task is to interpret handwritten text from students and return ONLY the word or words you read, without any additional explanation or formatting. Be lenient with spelling variations that elementary students might make.'
-          },
-          {
-            role: 'user',
-            content: [
+            parts: [
               {
-                type: 'text',
-                text: 'What word is written in this image? Return only the word itself, nothing else.'
+                text: 'You are a handwriting recognition assistant for elementary school students learning English verb tenses. Your task is to interpret handwritten text from students and return ONLY the word or words you read, without any additional explanation or formatting. Be lenient with spelling variations that elementary students might make. What word is written in this image? Return only the word itself, nothing else.'
               },
               {
-                type: 'image_url',
-                image_url: {
-                  url: imageData
+                inline_data: {
+                  mime_type: 'image/png',
+                  data: base64Image
                 }
               }
             ]
           }
         ],
-        max_tokens: 50,
-        temperature: 0.3
+        generationConfig: {
+          maxOutputTokens: 50,
+          temperature: 0.3
+        }
       }),
     });
 
@@ -83,7 +80,7 @@ serve(async (req) => {
     }
 
     const result = await response.json();
-    const interpretedText = result.choices[0]?.message?.content?.trim() || '';
+    const interpretedText = result.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
     
     console.log('Interpreted text:', interpretedText);
 
