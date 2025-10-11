@@ -80,6 +80,8 @@ serve(async (req) => {
     }
 
     const result = await response.json();
+    console.log('Gemini API response:', JSON.stringify(result, null, 2));
+    
     const interpretedText = result.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
     
     console.log('Interpreted text:', interpretedText);
