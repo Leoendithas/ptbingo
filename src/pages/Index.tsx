@@ -9,6 +9,7 @@ import { defaultVerbs, getRandomVerbs, Verb } from "@/data/verbs";
 import { checkBingoWin, getWinningLines } from "@/lib/bingo-utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import confetti from "canvas-confetti";
 
 interface CellState {
   attempted: boolean;
@@ -61,6 +62,14 @@ const Index = () => {
         toast.success(messages[currentLinesCount - 1], {
           duration: 3000,
         });
+        
+        // Confetti for first and second line
+        confetti({
+          particleCount: currentLinesCount === 1 ? 50 : 100,
+          spread: currentLinesCount === 1 ? 60 : 90,
+          origin: { y: 0.6 },
+          colors: ['#FFD700', '#FF69B4', '#87CEEB', '#98D8C8']
+        });
       }
       
       setCompletedLinesCount(currentLinesCount);
@@ -74,6 +83,33 @@ const Index = () => {
         toast.success("🎊 INCREDIBLE! You completed 3 lines and won!", {
           duration: 5000,
         });
+        
+        // Big celebration confetti for winning
+        const duration = 3000;
+        const end = Date.now() + duration;
+        
+        const frame = () => {
+          confetti({
+            particleCount: 5,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#FFD700', '#FF69B4', '#87CEEB', '#98D8C8', '#F97316']
+          });
+          confetti({
+            particleCount: 5,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#FFD700', '#FF69B4', '#87CEEB', '#98D8C8', '#F97316']
+          });
+          
+          if (Date.now() < end) {
+            requestAnimationFrame(frame);
+          }
+        };
+        frame();
+        
         setShowSummary(true);
       }, 1000);
     }
