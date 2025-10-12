@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Trophy, RotateCcw } from "lucide-react";
 import { Verb } from "@/data/verbs";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 interface GameSummaryProps {
   open: boolean;
@@ -24,6 +25,33 @@ export const GameSummary = ({
   const correctCount = cellStates.filter(s => s.correct).length;
   const attemptedCount = cellStates.filter(s => s.attempted).length;
   const totalAttempts = cellStates.reduce((sum, s) => sum + s.attempts, 0);
+
+  // Play win sound when modal opens if the player has won
+  useEffect(() => {
+    if (open && hasWon) {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      
+      // Special win sound - ascending chord
+      const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+      notes.forEach((freq, index) => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = freq;
+        oscillator.type = 'sine';
+        
+        const startTime = audioContext.currentTime + (index * 0.1);
+        gainNode.gain.setValueAtTime(0.15, startTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.4);
+        
+        oscillator.start(startTime);
+        oscillator.stop(startTime + 0.4);
+      });
+    }
+  }, [open, hasWon]);
 
   return (
     <Dialog open={open} onOpenChange={(open) => open && onOpenChange(open)}>

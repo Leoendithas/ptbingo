@@ -236,8 +236,7 @@ const Index = () => {
           };
           frame();
           
-          // Play special win sound
-          playLineCompletionSound(3);
+          // Don't play sound here - it will play when GameSummary modal opens
         }
         
         setPendingCelebration(null);
