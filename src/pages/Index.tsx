@@ -6,7 +6,7 @@ import { AnswerDialog } from "@/components/AnswerDialog";
 import { GameSummary } from "@/components/GameSummary";
 import { VerbListDialog } from "@/components/VerbListDialog";
 import { defaultVerbs, getRandomVerbs, Verb } from "@/data/verbs";
-import { checkBingoWin } from "@/lib/bingo-utils";
+import { checkBingoWin, getWinningLines } from "@/lib/bingo-utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -26,6 +26,7 @@ const Index = () => {
   const [showSummary, setShowSummary] = useState(false);
   const [showVerbList, setShowVerbList] = useState(false);
   const [hasWon, setHasWon] = useState(false);
+  const [completedLinesCount, setCompletedLinesCount] = useState(0);
 
   const initializeGame = () => {
     const verbs = getRandomVerbs(25, customVerbs);
@@ -35,6 +36,7 @@ const Index = () => {
     setAnswerResult(null);
     setShowSummary(false);
     setHasWon(false);
+    setCompletedLinesCount(0);
   };
 
   useEffect(() => {
@@ -42,17 +44,40 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    const won = checkBingoWin(cellStates.map(s => s.correct));
+    const correctCells = cellStates.map(s => s.correct);
+    const winningLines = getWinningLines(correctCells);
+    const currentLinesCount = winningLines.length;
+
+    // Check if new lines were completed
+    if (currentLinesCount > completedLinesCount) {
+      const newLinesCompleted = currentLinesCount - completedLinesCount;
+      
+      // Show celebration for each new line
+      if (currentLinesCount < 3) {
+        const messages = [
+          "🎉 Amazing! You completed a line!",
+          "🌟 Fantastic! That's 2 lines!",
+        ];
+        toast.success(messages[currentLinesCount - 1], {
+          duration: 3000,
+        });
+      }
+      
+      setCompletedLinesCount(currentLinesCount);
+    }
+
+    // Check for win (3+ lines)
+    const won = checkBingoWin(correctCells);
     if (won && !hasWon) {
       setHasWon(true);
       setTimeout(() => {
-        toast.success("Congratulations! You completed 3 lines!", {
+        toast.success("🎊 INCREDIBLE! You completed 3 lines and won!", {
           duration: 5000,
         });
         setShowSummary(true);
       }, 1000);
     }
-  }, [cellStates, hasWon]);
+  }, [cellStates, hasWon, completedLinesCount]);
 
   const handleCellClick = (index: number, verb: Verb) => {
     setSelectedCell({ index, verb });
@@ -186,6 +211,7 @@ const Index = () => {
             verbs={gameVerbs}
             onCellClick={handleCellClick}
             cellStates={cellStates}
+            completedLinesCount={completedLinesCount}
           />
         )}
 
