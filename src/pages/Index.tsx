@@ -28,6 +28,50 @@ const Index = () => {
   const [showVerbList, setShowVerbList] = useState(false);
   const [hasWon, setHasWon] = useState(false);
   const [completedLinesCount, setCompletedLinesCount] = useState(0);
+  const [pendingCelebration, setPendingCelebration] = useState<number | null>(null);
+
+  const playLineCompletionSound = (lineNumber: number) => {
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    
+    if (lineNumber === 3) {
+      // Special win sound - ascending chord
+      const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+      notes.forEach((freq, index) => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = freq;
+        oscillator.type = 'sine';
+        
+        const startTime = audioContext.currentTime + (index * 0.1);
+        gainNode.gain.setValueAtTime(0.15, startTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.4);
+        
+        oscillator.start(startTime);
+        oscillator.stop(startTime + 0.4);
+      });
+    } else {
+      // Simple pleasant tone for lines 1 and 2
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      const frequencies = [523.25, 659.25]; // C5, E5
+      oscillator.frequency.value = frequencies[lineNumber - 1];
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.3);
+    }
+  };
 
   const initializeGame = () => {
     const verbs = getRandomVerbs(25, customVerbs);
@@ -38,6 +82,7 @@ const Index = () => {
     setShowSummary(false);
     setHasWon(false);
     setCompletedLinesCount(0);
+    setPendingCelebration(null);
   };
 
   useEffect(() => {
@@ -51,27 +96,8 @@ const Index = () => {
 
     // Check if new lines were completed
     if (currentLinesCount > completedLinesCount) {
-      const newLinesCompleted = currentLinesCount - completedLinesCount;
-      
-      // Show celebration for each new line
-      if (currentLinesCount < 3) {
-        const messages = [
-          "🎉 Amazing! You completed a line!",
-          "🌟 Fantastic! That's 2 lines!",
-        ];
-        toast.success(messages[currentLinesCount - 1], {
-          duration: 3000,
-        });
-        
-        // Confetti for first and second line
-        confetti({
-          particleCount: currentLinesCount === 1 ? 50 : 100,
-          spread: currentLinesCount === 1 ? 60 : 90,
-          origin: { y: 0.6 },
-          colors: ['#FFD700', '#FF69B4', '#87CEEB', '#98D8C8']
-        });
-      }
-      
+      // Store pending celebration to trigger after modal closes
+      setPendingCelebration(currentLinesCount);
       setCompletedLinesCount(currentLinesCount);
     }
 
@@ -80,36 +106,6 @@ const Index = () => {
     if (won && !hasWon) {
       setHasWon(true);
       setTimeout(() => {
-        toast.success("🎊 INCREDIBLE! You completed 3 lines and won!", {
-          duration: 5000,
-        });
-        
-        // Big celebration confetti for winning
-        const duration = 3000;
-        const end = Date.now() + duration;
-        
-        const frame = () => {
-          confetti({
-            particleCount: 5,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0 },
-            colors: ['#FFD700', '#FF69B4', '#87CEEB', '#98D8C8', '#F97316']
-          });
-          confetti({
-            particleCount: 5,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1 },
-            colors: ['#FFD700', '#FF69B4', '#87CEEB', '#98D8C8', '#F97316']
-          });
-          
-          if (Date.now() < end) {
-            requestAnimationFrame(frame);
-          }
-        };
-        frame();
-        
         setShowSummary(true);
       }, 1000);
     }
@@ -183,6 +179,69 @@ const Index = () => {
     if (!open) {
       setSelectedCell(null);
       setAnswerResult(null);
+      
+      // Trigger pending celebration after modal closes
+      if (pendingCelebration !== null) {
+        const lineNumber = pendingCelebration;
+        
+        // Show toast message
+        if (lineNumber < 3) {
+          const messages = [
+            "🎉 Amazing! You completed a line!",
+            "🌟 Fantastic! That's 2 lines!",
+          ];
+          toast.success(messages[lineNumber - 1], {
+            duration: 3000,
+          });
+          
+          // Confetti for first and second line
+          confetti({
+            particleCount: lineNumber === 1 ? 50 : 100,
+            spread: lineNumber === 1 ? 60 : 90,
+            origin: { y: 0.6 },
+            colors: ['#FFD700', '#FF69B4', '#87CEEB', '#98D8C8']
+          });
+          
+          // Play sound
+          playLineCompletionSound(lineNumber);
+        } else {
+          // Win celebration
+          toast.success("🎊 INCREDIBLE! You completed 3 lines and won!", {
+            duration: 5000,
+          });
+          
+          // Big celebration confetti for winning
+          const duration = 3000;
+          const end = Date.now() + duration;
+          
+          const frame = () => {
+            confetti({
+              particleCount: 5,
+              angle: 60,
+              spread: 55,
+              origin: { x: 0 },
+              colors: ['#FFD700', '#FF69B4', '#87CEEB', '#98D8C8', '#F97316']
+            });
+            confetti({
+              particleCount: 5,
+              angle: 120,
+              spread: 55,
+              origin: { x: 1 },
+              colors: ['#FFD700', '#FF69B4', '#87CEEB', '#98D8C8', '#F97316']
+            });
+            
+            if (Date.now() < end) {
+              requestAnimationFrame(frame);
+            }
+          };
+          frame();
+          
+          // Play special win sound
+          playLineCompletionSound(3);
+        }
+        
+        setPendingCelebration(null);
+      }
     }
   };
 
