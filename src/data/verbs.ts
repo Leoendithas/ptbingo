@@ -64,3 +64,42 @@ export function getRandomVerbs(count: number, verbs: Verb[] = defaultVerbs): Ver
   const shuffled = [...verbs].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
 }
+
+export type DifficultyLevel = 1 | 2 | 3;
+
+export function getVerbsByDifficulty(level: DifficultyLevel, verbs: Verb[] = defaultVerbs): Verb[] {
+  const regularVerbs = verbs.filter(v => v.isRegular);
+  const irregularVerbs = verbs.filter(v => !v.isRegular);
+  
+  let regularCount: number;
+  let irregularCount: number;
+  
+  switch (level) {
+    case 1:
+      // Level 1: Most regular + few irregular
+      regularCount = 20;
+      irregularCount = 5;
+      break;
+    case 2:
+      // Level 2: Balanced mix
+      regularCount = 13;
+      irregularCount = 12;
+      break;
+    case 3:
+      // Level 3: Few regular + most irregular
+      regularCount = 5;
+      irregularCount = 20;
+      break;
+  }
+  
+  const shuffledRegular = [...regularVerbs].sort(() => Math.random() - 0.5);
+  const shuffledIrregular = [...irregularVerbs].sort(() => Math.random() - 0.5);
+  
+  const selectedVerbs = [
+    ...shuffledRegular.slice(0, regularCount),
+    ...shuffledIrregular.slice(0, irregularCount)
+  ];
+  
+  // Shuffle the combined array
+  return selectedVerbs.sort(() => Math.random() - 0.5);
+}

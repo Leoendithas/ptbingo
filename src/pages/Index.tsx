@@ -5,7 +5,7 @@ import { BingoGrid } from "@/components/BingoGrid";
 import { AnswerDialog } from "@/components/AnswerDialog";
 import { GameSummary } from "@/components/GameSummary";
 import { VerbListDialog } from "@/components/VerbListDialog";
-import { defaultVerbs, getRandomVerbs, Verb } from "@/data/verbs";
+import { defaultVerbs, getRandomVerbs, getVerbsByDifficulty, Verb, DifficultyLevel } from "@/data/verbs";
 import { checkBingoWin, getWinningLines } from "@/lib/bingo-utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,6 +29,7 @@ const Index = () => {
   const [hasWon, setHasWon] = useState(false);
   const [completedLinesCount, setCompletedLinesCount] = useState(0);
   const [pendingCelebration, setPendingCelebration] = useState<number | null>(null);
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>(1);
 
   const playLineCompletionSound = (lineNumber: number) => {
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -73,8 +74,9 @@ const Index = () => {
     }
   };
 
-  const initializeGame = () => {
-    const verbs = getRandomVerbs(25, customVerbs);
+  const initializeGame = (difficultyLevel?: DifficultyLevel) => {
+    const level = difficultyLevel ?? difficulty;
+    const verbs = getVerbsByDifficulty(level, customVerbs);
     setGameVerbs(verbs);
     setCellStates(verbs.map(() => ({ attempted: false, correct: false, attempts: 0 })));
     setSelectedCell(null);
@@ -268,6 +270,26 @@ const Index = () => {
           <p className="text-xl text-muted-foreground">
             Find the past tense and complete 3 lines to win!
           </p>
+        </div>
+
+        {/* Difficulty Selector */}
+        <div className="flex justify-center">
+          <div className="inline-flex gap-1 p-1 bg-card rounded-lg shadow-card border border-border">
+            {([1, 2, 3] as DifficultyLevel[]).map((level) => (
+              <Button
+                key={level}
+                onClick={() => {
+                  setDifficulty(level);
+                  initializeGame(level);
+                }}
+                variant={difficulty === level ? "default" : "ghost"}
+                size="sm"
+                className={difficulty === level ? "bg-gradient-primary" : ""}
+              >
+                Level {level}
+              </Button>
+            ))}
+          </div>
         </div>
 
         {/* Controls */}
