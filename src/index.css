@@ -35,6 +35,9 @@ All colors MUST be HSL.
 
     --destructive: 0 70% 60%;
     --destructive-foreground: 0 0% 100%;
+    
+    --progress-background: 0 0% 88%;
+    --progress-indicator: 140 70% 50%;
 
     --warning: 45 95% 60%;
     --warning-foreground: 260 60% 15%;
@@ -98,6 +101,9 @@ All colors MUST be HSL.
 
     --destructive: 0 70% 60%;
     --destructive-foreground: 0 0% 100%;
+    
+    --progress-background: 0 0% 30%;
+    --progress-indicator: 140 70% 50%;
 
     --warning: 45 95% 60%;
     --warning-foreground: 260 60% 15%;

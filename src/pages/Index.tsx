@@ -261,39 +261,46 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 p-4 sm:p-8">
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-4">
           <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-primary bg-clip-text text-transparent">
             Verb Tense Bingo
           </h1>
           <p className="text-xl text-muted-foreground">
             Find the past tense and complete 3 lines to win!
           </p>
-        </div>
-
-        {/* Difficulty Selector */}
-        <div className="flex justify-center">
-          <div className="inline-flex gap-1 p-1 bg-card rounded-lg shadow-card border border-border">
-            {([1, 2, 3] as DifficultyLevel[]).map((level) => (
-              <Button
-                key={level}
-                onClick={() => {
-                  setDifficulty(level);
-                  initializeGame(level);
-                }}
-                variant={difficulty === level ? "default" : "ghost"}
-                size="sm"
-                className={difficulty === level ? "bg-gradient-primary" : ""}
-              >
-                Level {level}
-              </Button>
-            ))}
+          
+          {/* Difficulty Selector */}
+          <div className="flex justify-center pt-2">
+            <div className="inline-flex gap-1 p-1 bg-card rounded-lg shadow-card border border-border">
+              {([1, 2, 3] as DifficultyLevel[]).map((level) => (
+                <Button
+                  key={level}
+                  onClick={() => {
+                    setDifficulty(level);
+                    initializeGame(level);
+                  }}
+                  variant={difficulty === level ? "default" : "ghost"}
+                  size="sm"
+                  className={difficulty === level ? "bg-gradient-primary" : ""}
+                >
+                  Level {level}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Controls */}
-        <div className="flex gap-2 justify-center flex-wrap">
+        <div className="flex gap-3 justify-center flex-wrap">
+          <Button
+            onClick={handleRestartGame}
+            size="lg"
+            className="bg-gradient-primary shadow-playful"
+          >
+            New Game
+          </Button>
           <Button
             onClick={() => setShowVerbList(true)}
             variant="outline"
@@ -311,13 +318,6 @@ const Index = () => {
           >
             <Trophy className="mr-2 h-5 w-5" />
             End Game
-          </Button>
-          <Button
-            onClick={handleRestartGame}
-            size="lg"
-            className="bg-gradient-primary shadow-playful"
-          >
-            New Game
           </Button>
         </div>
 

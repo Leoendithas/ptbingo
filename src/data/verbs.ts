@@ -160,6 +160,19 @@ export function getVerbsByDifficulty(level: DifficultyLevel, verbs: Verb[] = def
     ...shuffledIrregular.slice(0, irregularCount)
   ];
   
-  // Shuffle the combined array
-  return selectedVerbs.sort(() => Math.random() - 0.5);
+  // Shuffle the combined array and ensure exactly 25 verbs
+  const shuffledResult = selectedVerbs.sort(() => Math.random() - 0.5);
+  
+  // Safety check: if we don't have exactly 25, fill with more verbs
+  if (shuffledResult.length < 25) {
+    const allShuffled = [...verbs].sort(() => Math.random() - 0.5);
+    while (shuffledResult.length < 25 && allShuffled.length > 0) {
+      const nextVerb = allShuffled.shift();
+      if (nextVerb && !shuffledResult.find(v => v.present === nextVerb.present)) {
+        shuffledResult.push(nextVerb);
+      }
+    }
+  }
+  
+  return shuffledResult.slice(0, 25);
 }
