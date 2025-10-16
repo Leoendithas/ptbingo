@@ -40,7 +40,7 @@ serve(async (req) => {
           {
             parts: [
               {
-                text: 'You are a handwriting recognition assistant for elementary school students learning English verb tenses. Your task is to interpret handwritten text from students and return ONLY the word or words you read, without any additional explanation or formatting. Be lenient with spelling variations that elementary students might make. What word is written in this image? Return only the word itself, nothing else.'
+                text: 'You are a handwriting recognition assistant for elementary school students learning English verb tenses. Your task is to interpret handwritten text from students and return ONLY the exact word or words you read, without any additional explanation or formatting. Be strict and precise - only return the word if you can clearly read it. What word is written in this image? Return only the word itself, nothing else.'
               },
               {
                 inline_data: {
@@ -53,7 +53,7 @@ serve(async (req) => {
         ],
         generationConfig: {
           maxOutputTokens: 200,
-          temperature: 0.3
+          temperature: 0.1
         }
       }),
     });
