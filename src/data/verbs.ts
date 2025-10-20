@@ -48,7 +48,7 @@ export const defaultVerbs: Verb[] = [
   { present: "study", past: "studied", isRegular: true },
   { present: "learn", past: "learned", isRegular: true },
   { present: "visit", past: "visited", isRegular: true },
-  { present: "travel", past: "traveled", isRegular: true },
+  { present: "travel", past: "travelled", isRegular: true },
   { present: "carry", past: "carried", isRegular: true },
   { present: "drop", past: "dropped", isRegular: true },
   { present: "follow", past: "followed", isRegular: true },
