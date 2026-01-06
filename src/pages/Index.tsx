@@ -260,7 +260,17 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 p-4 sm:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 p-4 sm:p-8 relative">
+      {/* Settings Button - Top Right Corner */}
+      <Button
+        onClick={() => setShowVerbList(true)}
+        variant="ghost"
+        size="icon"
+        className="absolute top-4 right-4 shadow-card"
+      >
+        <Settings className="h-5 w-5" />
+      </Button>
+
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
@@ -300,15 +310,6 @@ const Index = () => {
             className="bg-gradient-primary shadow-playful"
           >
             New Game
-          </Button>
-          <Button
-            onClick={() => setShowVerbList(true)}
-            variant="outline"
-            size="lg"
-            className="shadow-card"
-          >
-            <Settings className="mr-2 h-5 w-5" />
-            Customize Words
           </Button>
           <Button
             onClick={handleEndGame}
