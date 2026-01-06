@@ -273,52 +273,50 @@ const Index = () => {
 
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
-        <div className="text-center space-y-4">
-          <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+        <div className="text-center space-y-2">
+          <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
             Verb Tense Bingo
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-lg text-muted-foreground">
             Find the past tense and complete 3 lines to win!
           </p>
-          
-          {/* Difficulty Selector */}
-          <div className="flex justify-center pt-2">
-            <div className="inline-flex gap-1 p-1 bg-card rounded-lg shadow-card border border-border">
-              {([1, 2, 3] as DifficultyLevel[]).map((level) => (
-                <Button
-                  key={level}
-                  onClick={() => {
-                    setDifficulty(level);
-                    initializeGame(level);
-                  }}
-                  variant={difficulty === level ? "default" : "ghost"}
-                  size="sm"
-                  className={difficulty === level ? "bg-gradient-primary" : ""}
-                >
-                  Level {level}
-                </Button>
-              ))}
-            </div>
-          </div>
         </div>
 
-        {/* Controls */}
-        <div className="flex gap-3 justify-center flex-wrap">
+        {/* Compact Controls Row */}
+        <div className="flex items-center justify-center gap-2 flex-wrap">
+          {/* Difficulty Selector */}
+          <div className="inline-flex gap-1 p-1 bg-card rounded-lg shadow-card border border-border">
+            {([1, 2, 3] as DifficultyLevel[]).map((level) => (
+              <Button
+                key={level}
+                onClick={() => {
+                  setDifficulty(level);
+                  initializeGame(level);
+                }}
+                variant={difficulty === level ? "default" : "ghost"}
+                size="sm"
+                className={difficulty === level ? "bg-gradient-primary" : ""}
+              >
+                Lv {level}
+              </Button>
+            ))}
+          </div>
+          
+          <div className="h-6 w-px bg-border hidden sm:block" />
+          
           <Button
             onClick={handleRestartGame}
-            size="lg"
+            size="sm"
             className="bg-gradient-primary shadow-playful"
           >
             New Game
           </Button>
           <Button
             onClick={handleEndGame}
-            variant="outline"
-            size="lg"
-            className="shadow-card"
+            variant="ghost"
+            size="sm"
           >
-            <Trophy className="mr-2 h-5 w-5" />
-            End Game
+            <Trophy className="h-4 w-4" />
           </Button>
         </div>
 
