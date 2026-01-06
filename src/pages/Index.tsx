@@ -286,11 +286,11 @@ const Index = () => {
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent pb-1">
             Verb Tense Bingo
           </h1>
           <p className="text-lg text-muted-foreground">
-            Find the past tense and complete 3 lines to win!
+            Write the past tense and complete 3 lines to win!
           </p>
         </div>
 
