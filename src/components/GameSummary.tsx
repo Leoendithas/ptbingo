@@ -55,7 +55,7 @@ export const GameSummary = ({
 
   return (
     <Dialog open={open} onOpenChange={(open) => open && onOpenChange(open)}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" onEscapeKeyDown={(e) => e.preventDefault()} onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto [&>button]:hidden" onEscapeKeyDown={(e) => e.preventDefault()} onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle className="text-center space-y-2">
             {hasWon && <Trophy className="w-16 h-16 text-warning mx-auto animate-bounce-subtle" />}
