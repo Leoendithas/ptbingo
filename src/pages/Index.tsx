@@ -290,7 +290,8 @@ const Index = () => {
             Verb Tense Bingo
           </h1>
           <p className="text-lg text-muted-foreground">
-            Write the past tense and complete 3 lines to win!
+            Change the words from Present to Past Tense. 
+            Complete 3 lines to win!
           </p>
         </div>
 

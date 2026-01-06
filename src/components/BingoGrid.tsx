@@ -17,14 +17,13 @@ export const BingoGrid = ({ verbs, onCellClick, cellStates, completedLinesCount 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-3">
       {/* Line Progress Indicator */}
-      <div className="text-center space-y-2">
-        <div className="inline-flex items-center gap-2 px-6 py-3 bg-card rounded-full shadow-card border-2 border-primary/20">
+      <div className="text-center mb-4">
+        <div className="inline-flex items-center gap-3 px-4 py-2 bg-card/50 rounded-lg border border-border/50 shadow-sm">
           <Trophy className="w-5 h-5 text-primary" />
-          <span className="text-lg font-bold text-foreground">
+          <span className="text-base font-semibold text-foreground">
             {completedLinesCount} of 3 lines completed
           </span>
         </div>
-        <Progress value={(completedLinesCount / 3) * 100} className="h-3 max-w-md mx-auto" />
       </div>
 
       <div className="grid grid-cols-5 gap-2 sm:gap-3 p-4 bg-card rounded-2xl shadow-card">
