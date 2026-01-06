@@ -316,13 +316,28 @@ const Index = () => {
           
           <div className="h-6 w-px bg-border hidden sm:block" />
           
-          <Button
-            onClick={handleRestartGame}
-            size="sm"
-            className="bg-gradient-primary shadow-playful"
-          >
-            New Game
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                size="sm"
+                className="bg-gradient-primary shadow-playful"
+              >
+                New Game
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Start New Game?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure? You will lose your current progress.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleRestartGame}>New Game</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <AlertDialog>
             <TooltipProvider>
               <Tooltip>
