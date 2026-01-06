@@ -21,7 +21,7 @@ export const VerbListDialog = ({ open, onOpenChange, verbs, onSave }: VerbListDi
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "Bendemeer") {
+    if (password === "Teacher") {
       setIsUnlocked(true);
       toast.success("Access granted!");
     } else {
