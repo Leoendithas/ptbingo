@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Settings, Trophy } from "lucide-react";
+import { Settings } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { BingoGrid } from "@/components/BingoGrid";
 import { AnswerDialog } from "@/components/AnswerDialog";
 import { GameSummary } from "@/components/GameSummary";
@@ -311,13 +312,22 @@ const Index = () => {
           >
             New Game
           </Button>
-          <Button
-            onClick={handleEndGame}
-            variant="ghost"
-            size="sm"
-          >
-            <Trophy className="h-4 w-4" />
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={handleEndGame}
+                  variant="ghost"
+                  size="sm"
+                >
+                  🏁
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>End Game</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
         {/* Game Grid */}
