@@ -97,8 +97,8 @@ export const HandwritingCanvas = ({ onSubmit, onCancel, isSubmitting }: Handwrit
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="bg-white rounded-xl border-4 border-primary shadow-playful overflow-hidden">
+    <div className="flex flex-col gap-2 sm:gap-4">
+      <div className="bg-white rounded-xl border-2 sm:border-4 border-primary shadow-playful overflow-hidden">
         <canvas
           ref={canvasRef}
           onMouseDown={startDrawing}
@@ -108,34 +108,34 @@ export const HandwritingCanvas = ({ onSubmit, onCancel, isSubmitting }: Handwrit
           onTouchStart={startDrawing}
           onTouchMove={draw}
           onTouchEnd={stopDrawing}
-          className="w-full h-64 touch-none cursor-crosshair"
+          className="w-full h-40 sm:h-56 md:h-64 touch-none cursor-crosshair"
         />
       </div>
 
-      <div className="flex gap-2 justify-between">
+      <div className="flex gap-1.5 sm:gap-2 justify-between">
         <Button
           onClick={clearCanvas}
           variant="outline"
-          size="lg"
-          className="flex-1"
+          size="default"
+          className="flex-1 text-xs sm:text-sm"
           disabled={!hasDrawn || isSubmitting}
         >
-          <Eraser className="mr-2 h-5 w-5" />
+          <Eraser className="mr-1 sm:mr-2 h-4 w-4" />
           Clear
         </Button>
         <Button
           onClick={onCancel}
           variant="outline"
-          size="lg"
-          className="flex-1"
+          size="default"
+          className="flex-1 text-xs sm:text-sm"
           disabled={isSubmitting}
         >
           Cancel
         </Button>
         <Button
           onClick={handleSubmit}
-          size="lg"
-          className="flex-1 bg-gradient-primary"
+          size="default"
+          className="flex-1 bg-gradient-primary text-xs sm:text-sm"
           disabled={!hasDrawn || isSubmitting}
         >
           {isSubmitting ? "Checking..." : "Submit"}
