@@ -15,18 +15,18 @@ export const BingoGrid = ({ verbs, onCellClick, cellStates, completedLinesCount 
   const hasWon = checkBingoWin(cellStates.map(s => s.correct));
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-3">
+    <div className="w-full max-w-2xl mx-auto space-y-2 sm:space-y-3">
       {/* Line Progress Indicator */}
-      <div className="text-center mb-4">
-        <div className="inline-flex items-center gap-3 px-4 py-2 bg-card/50 rounded-lg border border-border/50 shadow-sm">
-          <Trophy className="w-5 h-5 text-primary" />
-          <span className="text-base font-semibold text-foreground">
+      <div className="text-center mb-2 sm:mb-4">
+        <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 bg-card/50 rounded-lg border border-border/50 shadow-sm">
+          <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+          <span className="text-sm sm:text-base font-semibold text-foreground">
             {completedLinesCount} of 3 lines completed
           </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-5 gap-2 sm:gap-3 p-4 bg-card rounded-2xl shadow-card">
+      <div className="grid grid-cols-5 gap-1 sm:gap-2 md:gap-3 p-2 sm:p-3 md:p-4 bg-card rounded-xl sm:rounded-2xl shadow-card">
         {verbs.map((verb, index) => (
           <BingoCell
             key={index}
