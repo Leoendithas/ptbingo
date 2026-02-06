@@ -272,31 +272,31 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 p-4 sm:p-8 relative">
+    <div className="min-h-screen w-full bg-gradient-to-br from-background via-primary/5 to-accent/10 p-2 sm:p-4 md:p-8 relative box-border">
       {/* Settings Button - Top Right Corner */}
       <Button
         onClick={() => setShowVerbList(true)}
         variant="ghost"
         size="icon"
-        className="absolute top-4 right-4 shadow-card"
+        className="absolute top-2 right-2 sm:top-4 sm:right-4 shadow-card"
       >
         <Settings className="h-5 w-5" />
       </Button>
 
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="w-full max-w-4xl mx-auto space-y-4 sm:space-y-6 md:space-y-8">
         {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent pb-1">
+        <div className="text-center space-y-1 sm:space-y-2">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold bg-gradient-primary bg-clip-text text-transparent pb-1">
             Verb Tense Bingo
           </h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground px-2">
             Change the words from Present to Past Tense. 
             Complete 3 lines to win!
           </p>
         </div>
 
         {/* Compact Controls Row */}
-        <div className="flex items-center justify-center gap-2 flex-wrap">
+        <div className="flex items-center justify-center gap-1 sm:gap-2 flex-wrap px-1">
           {/* Difficulty Selector */}
           <div className="inline-flex gap-1 p-1 bg-card rounded-lg shadow-card border border-border">
             {([1, 2, 3] as DifficultyLevel[]).map((level) => (
