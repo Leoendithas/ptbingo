@@ -27,19 +27,19 @@ export const AnswerDialog = ({
 }: AnswerDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-[95vw] sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold text-center">
+          <DialogTitle className="text-xl sm:text-2xl md:text-3xl font-bold text-center">
             What is the past tense of
           </DialogTitle>
-          <DialogDescription className="text-4xl font-bold text-center text-primary pt-2">
+          <DialogDescription className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-primary pt-1 sm:pt-2">
             {verb}?
           </DialogDescription>
         </DialogHeader>
 
         {!result ? (
-          <div className="space-y-4 pt-4">
-            <p className="text-center text-muted-foreground">
+          <div className="space-y-3 sm:space-y-4 pt-2 sm:pt-4">
+            <p className="text-center text-sm sm:text-base text-muted-foreground">
               Write or draw your answer below
             </p>
             <HandwritingCanvas
@@ -49,27 +49,27 @@ export const AnswerDialog = ({
             />
           </div>
         ) : (
-          <div className="space-y-6 pt-4">
+          <div className="space-y-4 sm:space-y-6 pt-2 sm:pt-4">
             <div
-              className={`p-6 rounded-xl text-center ${
+              className={`p-4 sm:p-6 rounded-xl text-center ${
                 result.correct
                   ? "bg-success/10 border-2 border-success"
                   : "bg-destructive/10 border-2 border-destructive"
               }`}
             >
               {result.correct ? (
-                <div className="space-y-3">
-                  <CheckCircle2 className="w-16 h-16 text-success mx-auto animate-celebrate" />
-                  <p className="text-2xl font-bold text-success">Correct!</p>
-                  <p className="text-lg text-foreground">
+                <div className="space-y-2 sm:space-y-3">
+                  <CheckCircle2 className="w-12 h-12 sm:w-16 sm:h-16 text-success mx-auto animate-celebrate" />
+                  <p className="text-xl sm:text-2xl font-bold text-success">Correct!</p>
+                  <p className="text-base sm:text-lg text-foreground">
                     You wrote: <span className="font-bold">{result.interpreted}</span>
                   </p>
                 </div>
               ) : (
-                <div className="space-y-3">
-                  <AlertCircle className="w-16 h-16 text-destructive mx-auto" />
-                  <p className="text-2xl font-bold text-destructive">Try Again!</p>
-                  <p className="text-lg text-foreground">
+                <div className="space-y-2 sm:space-y-3">
+                  <AlertCircle className="w-12 h-12 sm:w-16 sm:h-16 text-destructive mx-auto" />
+                  <p className="text-xl sm:text-2xl font-bold text-destructive">Try Again!</p>
+                  <p className="text-base sm:text-lg text-foreground">
                     I read: <span className="font-bold">{result.interpreted}</span>
                   </p>
                 </div>
@@ -96,7 +96,7 @@ export const AnswerDialog = ({
                     Try Another
                   </Button>
                   <Button onClick={onRetry} size="lg" className="flex-1 bg-gradient-primary">
-                    <RotateCcw className="mr-2 h-5 w-5" />
+                    <RotateCcw className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                     Retry
                   </Button>
                 </>
